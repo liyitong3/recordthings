@@ -1,0 +1,102 @@
+<script>
+    window.onload = function () {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要+1
+        var day = String(date.getDate()).padStart(2, '0');
+
+        var formattedDate = year + '-' + month + '-' + day;
+        document.getElementById('thingxuanze').value = formattedDate;
+
+        layui.use(['laydate'], function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#thingxuanze' //指定元素
+            });
+        });
+
+        $(document).ready(function () {
+            $('#thingxinjian').click(function () {
+                var content = document.getElementById('thingshuru').value;
+                var time = document.getElementById('thingxuanze').value;
+                var type = document.getElementById('thingleixing').value;
+                if (content.length == 0) {
+                    alert("内容不能为空");
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/xinjianjishi', // 替换为你的URL
+                    data: {
+                        neirong: content,
+                        time: time,
+                        leixing: type
+                    },
+                    success: function (response) {
+                        // 处理成功响应
+                        if (response.length <= 8) {
+                            alert("请先登陆, 用户操作→登陆");
+                            return;
+                        }
+                        alert("新建成功");
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 处理错误响应
+                        alert("新建失败，错误信息如下：\n请先登陆\n" + error);
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+    }
+</script>
+<style>
+    #thingshuru {
+        max-width: 666px;
+        height: 200px;
+        border: 2px solid gray;
+        font-size: 24px;
+        margin: 5px auto;
+    }
+
+    #thingshuru:focus {
+        outline: none; /* 去掉边框 */
+    }
+
+    #thingxinjian {
+        float: right
+    }
+
+    .layui-row {
+        margin: auto
+    }
+
+    .layui-container {
+        margin: auto;
+    }
+</style>
+
+<div class="layui-container">
+    <div class="layui-row">
+        <h1 align="center">新建记事</h1>
+    </div>
+    <div class="layui-row">
+        <textarea id="thingshuru" placeholder="请输入记事内容" style="height: 200px; display: block; margin: 0 auto;max-width: 666px;width: 100%"></textarea>
+    </div>
+    <div class="layui-row" style="font-size: 20px; max-width: 666px;">
+        <span>录入时间：</span>
+        <input class="text" type="date1" id="thingxuanze" placeholder="点击此处然后选择时间">
+        <span>事件类型：</span>
+        <select id="thingleixing">
+            {% for thing_type in leixing %}
+                <option value="{{ thing_type }}">{{ thing_type }}</option>
+            {% endfor %}
+        </select>
+        <button id="thingxinjian">提交</button>
+    </div>
+</div>
+{% include "base/footbar.html" %}

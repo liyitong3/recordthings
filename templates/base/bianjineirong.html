@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/layui.css') }}">
+<script src="{{ url_for('static', filename='layui.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+<script>
+        function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length+1, c.length-1);
+        }
+        return null;
+    }
+    $(document).ready(function(){
+        document.getElementById('thingshuru').innerHTML = '{{  yuanxianneirong['neirong'] }}';
+        document.getElementById('thingxuanze').value = '{{  yuanxianneirong['time'] }}';
+        document.getElementById('thingleixing').value = '{{ yuanxianneirong['leixing'] }}';
+        document.getElementById('thing_wancheng').value = '{{  yuanxianneirong['wancheng'] }}';
+
+        layui.use(['laydate'], function(){
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#thingxuanze' //指定元素
+            });
+            laydate.render({
+                elem: '#thing_end_time' //指定元素
+            });
+        });
+
+        $("#yonghuming").html(getCookie('jsxt_user'));
+        $('#thing_edit').click(function(){
+            var content = $('#thingshuru').text();
+            var time = $('#thingxuanze').val();
+            var type = $('#thingleixing').val();
+            var endtime = $('#thing_end_time').val();
+            if (endtime.length==0) endtime='0000-00-00'
+            var ok = $('#thing_wancheng').val();
+            if(content.length == 0) {
+                alert("内容不能为空");
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/bianjineirong', // 替换为你的URL
+                data: {
+                    neirong: content,
+                    time: time,
+                    leixing: type,
+                    end_time: endtime,
+                    wancheng: ok,
+                    id: {{ yuanxianneirong['id'] }}
+                },
+                success: function(response){
+                    // 处理成功响应
+                    layer.msg(response, {icon: 1, time: 3000}, function(){});
+
+                },
+                error: function(xhr, status, error){
+                    // 处理错误响应
+                    alert("新建失败，错误信息如下：\n请先登陆\n" + error);
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+    <style>
+        #thingshuru {max-width: 666px; height: 200px; border: 2px solid gray;font-size: 24px; margin: 5px auto;}
+        #thingshuru:focus {
+            outline: none; /* 去掉边框 */
+        }
+        #thing_edit{float:right; display: flex}
+        .layui-row {margin: auto}
+        .layui-container {margin: auto;}
+        #thingleixing, #thing_wancheng {width: 140px;}
+        #thingxuanze, #thing_end_time {width: 180px;}
+    </style>
+
+<div class="layui-container">
+    <div class="layui-row">
+        <h1 align="center">修改记事</h1>
+    </div>
+    <div class="layui-row">
+        <div id="thingshuru" placeholder="请输入记事内容" contenteditable="true"></div>
+    </div>
+    <div class="layui-row" style="font-size: 20px; max-width: 666px;">
+        <span>录入时间：</span>
+        <input type="date1" id="thingxuanze" placeholder="点击此处选择时间">
+            <span>事件类型：</span>
+        <select id="thingleixing">
+            {% for thing_type in leixing %}
+                <option value="{{ thing_type }}">{{ thing_type }}</option>
+            {% endfor %}
+        </select>
+    </div><div class="layui-row" style="font-size: 20px; max-width: 666px;">
+        <span>完成时间：</span>
+        <input type="date1" id="thing_end_time" placeholder="点击此处选择时间">
+        <span>是否完成：</span>
+            <select id="thing_wancheng">
+                <option value="1">完成</option>
+                <option value="0">进行中</option>
+        </select>
+        <button id="thing_edit">提交</button>
+    </div>
+</div>

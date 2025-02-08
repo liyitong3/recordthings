@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX测试页面</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layui.css') }}">
+    <script src="{{ url_for('static', filename='layui.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <style type="text/css">
+        body {
+            font-size: 24px;
+            padding-top: 5px;
+        }
+
+        #output {
+            border: 2px solid gray;
+        }
+
+        #urlInput {
+            width: 100%;
+        }
+
+        #dataInput, #output {
+            width: 100%;
+            min-height: 400px;
+            margin: 5px 5px 0 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#ajaxButton").click(function () {
+                var method = $("#methodSelect").val();
+                var url = $("#urlInput").val();
+                var data = $("#dataInput").value;
+
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: data,
+                    success: function (response) {
+                        $("#output").text(response);
+                    },
+                    error: function (xhr, status, error) {
+                        $("#output").text("发生错误: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-md1">
+
+            <select id="methodSelect">
+                <option value="POST" selected>POST</option>
+                <option value="GET">GET</option>
+            </select>
+        </div>
+        <div class="layui-col-md11">
+            <input type="text" id="urlInput" value="http://127.0.0.1:5000">
+        </div>
+    </div>
+    <div class="layui-row">
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 40%;">提交的数据</td>
+                <td style="width: 60%;">服务端响应</td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea type="text" id="dataInput"></textarea></td>
+                <td>
+                    <div id="output"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="layui-row">
+        <button id="ajaxButton">发送AJAX请求</button>
+    </div>
+
+</div>
+</body>
+</html>

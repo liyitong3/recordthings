@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>记事系统-登陆注册</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layui.css') }}">
+    <script src="{{ url_for('static', filename='layui.js') }}" ></script>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}" ></script>
+    <style type="text/css">
+        body{background-color: #F9F4F4;}
+    </style>
+</head>
+<body>
+{% include "base/headbar.html" %}
+{% include"base/daohang.html" %}
+{% include "base/denglu_zhuce.html" %}
+<div class="container" style="text-align: center">
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+{% include "base/footbar.html" %}
+</div>
+</body>
+</html>

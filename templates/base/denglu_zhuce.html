@@ -1,0 +1,200 @@
+<style>
+    #dengluzhuce {
+        max-width: 666px;
+        height: 400px;
+        border: 2px solid gray;
+        font-size: 24px;
+        margin: 5px auto;
+    }
+
+    #denglu, #zhuce {
+        font-size: 24px;
+    }
+
+    .login-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #loginForm, #zhuceForm {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        width: 86%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .form-group button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 35px;
+    }
+
+    .form-group button:hover {
+        background-color: #0056b3;
+    }
+
+    .form-group button + button {
+        margin-left: 10px;
+    }
+</style>
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById('denglu').addEventListener('click', function () {
+            document.getElementById('dengluzhuce').style.height = "400px";
+        });
+        document.getElementById('zhuce').addEventListener('click', function () {
+            document.getElementById('dengluzhuce').style.height = "480px";
+        });
+        document.getElementById('showPassword').addEventListener('click', function () {
+            var passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.textContent = '隐藏密码';
+            } else {
+                passwordInput.type = 'password';
+                this.textContent = '显示密码';
+            }
+        });
+
+        document.getElementById('loginButton').addEventListener('click', function (event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // 使用AJAX发送登录请求
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/login', 0);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 处理成功响应
+                    if (xhr.response == "1") {
+                        alert('登录成功');
+                        document.cookie = "jsxt_user='"+username+"'";
+                        window.open("/index", "_self");
+                        }
+                    else if (xhr.response == "2") {
+                        alert('已经登陆');
+                    }
+                    else if (xhr.response == "0") {
+                        alert('用户名不存在，请先注册。\n用户操作→注册');
+                    }
+                    else if (xhr.response == "-1") {
+                        alert('账号或密码错误，请检查后重试');
+                    }
+                    }
+                else {
+                        alert('网络连接出现问题');
+                }
+            };
+            xhr.send(JSON.stringify({username: username, password: password}));
+        });
+        document.getElementById('zhuceButton').addEventListener('click', function (event) {
+            event.preventDefault();
+            var username2 = document.getElementById('username2').value;
+            var password2 = document.getElementById('password2').value;
+            var xm2 = document.getElementById('xingming2').value;
+            // 使用AJAX发送注册请求
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/zhuce', 0);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 处理成功响应
+                    if (xhr.response == "-1") {
+                        alert("用户名已存在");
+                    }
+                    else{
+                        alert('注册成功');
+                    }
+                }
+                else {
+                    // 处理错误响应
+                    alert(xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify({username: username2, password: password2, xm: xm2}));
+        });
+    }
+</script>
+<div class="layui-container">
+    <div id="dengluzhuce">
+        <div class="layui-row">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" id="denglu">登陆</li>
+                    <li id="zhuce">注册</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="login-container">
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label for="username">账号:</label>
+                                    <input type="text" id="username" name="username" placeholder="请输入账号">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">密码:</label>
+                                    <input type="password" id="password" name="password" placeholder="请输入密码">
+                                </div>
+                                <div class="form-group" style="float: right; display: flex;margin-right: 10%">
+                                    <button type="button" id="showPassword">显示密码</button>
+                                    <button type="submit" id="loginButton">登录</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="login-container">
+                            <form id="zhuceForm">
+                                <div class="form-group">
+                                    <label for="username">账号:</label>
+                                    <input type="text" id="username2" name="username" placeholder="请输入账号">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">密码:</label>
+                                    <input type="password" id="password2" name="password" placeholder="请输入密码">
+                                </div>
+                                <div class="form-group">
+                                    <label for="text">姓名:</label>
+                                    <input type="text" id="xingming2" name="password"
+                                           placeholder="网名即可，留空也行">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="zhuceButton"
+                                            style="float: right; display: flex;margin-right: 10%">注册
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

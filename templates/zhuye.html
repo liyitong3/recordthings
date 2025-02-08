@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>记事系统</title>
+    <style>
+        .sidebar {
+            width: 150px;
+            height: 80vh;
+            background-color: #DADDDFB8;
+            float: left;
+            font-size: 24px;
+        }
+
+        .content {
+            margin-left: 120px;
+            padding: 10px;
+        }
+
+        .menu-item {
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .menu-item.active {
+            background-color: #c2c7d2;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById('caidan1').addEventListener("click", function () {
+                document.getElementById('caidan1').style.backgroundColor = '#c2c7d2';
+                document.getElementById('caidan2').style.backgroundColor = '#DADDDFB8';
+                document.getElementById('page1').style.display = 'block';
+                document.getElementById('page2').style.display = 'none';
+                layui.use('table', function () {
+                    var table = layui.table;
+                    table.reload('table1',{
+                        url: '/sql/get_things_list', // 数据接口
+                        where:{yonghuming: getCookie('jsxt_user'), shujufanwei:'undone'},
+                });});
+
+            });
+            document.getElementById('caidan2').addEventListener("click", function () {
+                document.getElementById('caidan2').style.backgroundColor = '#c2c7d2';
+                document.getElementById('caidan1').style.backgroundColor = '#DADDDFB8';
+                document.getElementById('page2').style.display = 'block';
+                document.getElementById('page1').style.display = 'none';
+                layui.use('table', function () {
+                    var table = layui.table;
+                    table.reload('table2',{
+                        url: '/sql/get_things_list', // 数据接口
+                        where:{yonghuming: getCookie('jsxt_user'), shujufanwei:'all'},
+                });});
+            });
+        }
+    </script>
+</head>
+<body>
+{% include "base/headbar.html" %}
+{% include"base/daohang.html" %}
+<div class="layui-text2">已加载Layui和jQuery。以后所有项目复制一份这个出去再写。
+    flask的flash消息，需要get_flashed_messages()返回
+</div>
+<div class="layui-btn-warm" id="xianshinicheng">null</div>
+<div class="sidebar">
+    <div class="menu-item active" id="caidan1">当前进行</div>
+    <div class="menu-item" id="caidan2">浏览全部</div>
+</div>
+
+<div class="content">
+    <div id="page1" class="page active">
+        {% include "base/dangqianjinxing.html" %}
+    </div>
+    <div id="page2" class="page" style="display: none">
+        {% include "base/liulanquanbu.html" %}
+    </div>
+</div>
+
+<div class="container">
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+    {% include "base/footbar.html" %}
+</div>
+</body>
+</html>

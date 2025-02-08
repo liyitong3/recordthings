@@ -1,0 +1,206 @@
+<div style="font-size: 24px; text-align: center; display: none"><span>当前任务</span></div>
+<style>
+    .layui-time {
+        width: 120px;
+    }
+
+    #sousuotiaojian {
+        font-size: 20px; margin-left: 20px; display: none;
+    }
+
+    #chazhaoleibie {
+        width: 120px;
+    }
+    #kaishishijian, #jieshushijian{
+        background-color: #D5D5D5;
+    }
+
+</style>
+
+<div class="layui-fluid" style="height: 37px; border1: 2px solid grey" id="sousuotiaojian">
+    <label>开始时间</label>
+    <div class="layui-input-inline">
+        <input type="text" class="layui-time layui-input" id="kaishishijian" placeholder="yyyy-MM-dd">
+    </div>
+    <label>结束时间</label>
+    <div class="layui-input-inline">
+        <input type="text" class="layui-time layui-input" id="jieshushijian" placeholder="yyyy-MM-dd">
+    </div>
+    <label>类型:</label>
+    <select id="chazhaoleibie">
+        {% for thing_type in leixing %}
+            <option value="{{ thing_type }}">{{ thing_type }}</option>
+        {% endfor %}
+    </select>
+    <button class="layui-btn-warm" id="dangqianchazhao">查询全部</button>
+    <button class="layui-btn-normal" id="jieguodaochu">导出</button>
+</div>
+<script>
+    layui.use(['laydate'], function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#kaishishijian' //指定元素
+        });
+        laydate.render({
+            elem: '#jieshushijian' //指定元素
+        });
+    });
+
+</script>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+</script>
+
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //同时选择开始和结束时间
+        laydate.render({
+            elem: '#start-time',
+            type: 'datetime',
+            range: true,
+            done: function (value, date) {
+                var startDate = new Date(value.split(' - ')[0]);
+                var endDate = new Date(value.split(' - ')[1]);
+                laydate.render({
+                    elem: '#end-time',
+                    type: 'datetime',
+                    min: startDate,
+                    max: endDate
+                });
+            }
+        });
+    });
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table, form = layui.form;
+        table.render({
+            id: 'table1',
+            elem: '#test',
+            url: '/sql/get_things_list', // 数据接口
+            method: 'post', // 使用POST方法
+            where: {yonghuming: getCookie('jsxt_user'), shujufanwei: "undone"},
+            cols: [[ // 表头
+                {field: 'id', title: '事件编号', width: 40, hide: true},
+                {field: 'time', title: '时间', width: 130},
+                {field: 'neirong', title: '内容', width: 300 },
+                {field: 'leixing', title: '事务类型', width: 100},
+                {
+                    field: 'wancheng', title: '完成与否', width: 120, templet: function (d) {
+                        if (d.wancheng == 0) {
+                            return '<input type="checkbox" id="wancheng_switch" lay-filter="wcglq" lay-skin="switch" lay-text="是|否" value="' + d.id + '">';
+                        } else if (d.wancheng == 1) {
+                            return '<input type="checkbox" id="wancheng_switch" lay-filter="wcglq" lay-skin="switch" lay-text="是|否" checked value="' + d.id + '">';
+                        }
+                    }
+                }, {fixed: 'right', title: '功能', toolbar: '#barDemo', width: 200}
+            ]],
+            page: 1, // 不开启分页了先
+            limit: 10, // 每页显示的条数
+            limits: [10, 20, 30, 40, 50], // 每页条数的选择项
+            done: function (res, curr, count) {
+                if (count === 0) {
+                    layer.msg('暂无待处理业务');
+                }
+            }
+        });
+        form.on('switch(wcglq)', function (obj) {
+            if (obj.elem.checked)
+                done_tag = 1;
+            else
+                done_tag = 0;
+            $.ajax({
+                url: '/sql/done_id',
+                type: 'POST',
+                data: {id: obj.elem.value, donetag: done_tag},
+                success: function (response) {
+                    layer.msg(response, {time: 3000});
+                    obj.del();
+                }
+            });
+        });
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'detail') {
+                layer.confirm(data.neirong+'<br>完成时间：'+data.end_time, {
+                    title: '具体的内容如下',
+                    btn: ['确定'],
+                    icon: 1, //0:感叹号，1:对号，2:叉号，3:问号，4:锁，5:哭脸，6:笑脸
+                    yes: function (index, layero) {
+                        // 确定按钮的回调函数
+                        layer.close(index);
+                    },
+                    cancel: function (index, layero) {
+                        // 取消按钮的回调函数
+                    }
+                });
+                layer.close(index);
+            } else if (obj.event === 'edit') {
+                layer.open(
+                    {
+                        type: 2,
+                        title: '编辑记事',
+                        content: "/bianjineirong?id=" + obj.data.id
+                        , area: ['800px', '600px']
+                    }
+                );
+            } else if (obj.event === 'ok') {
+                layer.confirm('如果事务完毕，点击确定。 点击取消或者点x即可关闭。', {title: '事情结束了吗？'}, function (index) {
+                    $.ajax({
+                        url: '/sql/done_id',
+                        type: 'POST',
+                        data: {id: obj.data.id, donetag: 1},
+                        success: function (response) {
+                            layer.msg(response, {time: 3000});
+                            obj.del();
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    $.ajax({
+                        url: '/sql/delete_id',
+                        type: 'POST',
+                        data: {id: obj.data.id},
+                        success: function (response) {
+                            layer.msg(response, {time: 3000});
+                            obj.del();
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.getElementById('dangqianchazhao').addEventListener('click', function () {
+        layui.use('table', function () {
+        var table = layui.table;
+        table.reload('table1',{
+            url: '/sql/get_things_list', // 数据接口
+            where:{yonghuming: getCookie('jsxt_user'),
+                shujufanwei:'all' }
+        });
+        });})
+    document.getElementById('jieguodaochu').addEventListener('click', function () {
+        alert('查询时候就直接保存，点击导出时候再触发下载。后端保存文件吧，以用户名和时间，sendfile');
+    })
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要+1
+    var day = String(date.getDate()).padStart(2, '0');
+
+    var formattedDate = year + '-' + month + '-' + day;
+    document.getElementById('kaishishijian').value = formattedDate;
+    document.getElementById('jieshushijian').value = formattedDate;
+</script>

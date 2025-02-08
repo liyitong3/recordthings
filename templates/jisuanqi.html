@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>计算器示例</title>
+    <script>
+        function calculateSum() {
+            // 获取第一个输入框的值
+            var num1 = parseFloat(document.getElementById('num1').value);
+            // 获取第二个输入框的值
+            var num2 = parseFloat(document.getElementById('num2').value);
+            // 计算两个数的和
+            var sum = num1 + num2;
+            // 将结果显示在第三个输入框中
+            document.getElementById('sum').value = sum;
+        }
+    </script>
+</head>
+<body>
+
+    <label for="num1">数字 1:</label>
+    <input type="number" id="num1" name="num1">
+    <br><br>
+
+    <label for="num2">数字 2:</label>
+    <input type="number" id="num2" name="num2">
+    <br><br>
+
+    <label for="sum">结果:</label>
+    <input type="number" id="sum" name="sum" readonly>
+    <br><br>
+
+    <button onclick="calculateSum()">计算</button>
+
+</body>
+</html>

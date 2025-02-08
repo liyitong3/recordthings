@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注销登陆信息</title>
+</head>
+<body>
+{% include "base/headbar.html" %}
+{% include"base/daohang.html" %}
+<div class="container" style="font-size: 32px; margin: 20px auto; text-align: center; color: #009688">
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+{% include "base/footbar.html" %}
+</div>
+</body>
+</html>
