@@ -15,8 +15,11 @@
 3.编辑mysql_util.py文件里面的数据库链接信息，和MySQL数据库保持一致。
 
 host = '127.0.0.1'    # 主机名
+
 user = 'root'         # 数据库用户名
+
 password = '123456'     # 数据库密码
+
 database = 'memory_things_system' # 数据库名称
 
 4.新建数据库，名称和第3步的database值保持一致。打开“mysql导入”文件夹，新建3张表和1个视图。
