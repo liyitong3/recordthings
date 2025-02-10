@@ -13,7 +13,7 @@
         return null;
     }
     $(document).ready(function(){
-        document.getElementById('thingshuru').innerHTML = '{{  yuanxianneirong['neirong'] }}';
+        document.getElementById('thingshuru').innerHTML = '{{  yuanxianneirong['neirong']  | safe}}';
         document.getElementById('thingxuanze').value = '{{  yuanxianneirong['time'] }}';
         document.getElementById('thingleixing').value = '{{ yuanxianneirong['leixing'] }}';
         document.getElementById('thing_wancheng').value = '{{  yuanxianneirong['wancheng'] }}';
