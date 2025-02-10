@@ -30,7 +30,7 @@
                     type: 'POST',
                     url: '/xinjianjishi', // 替换为你的URL
                     data: {
-                        neirong: content,
+                        neirong: content.replaceAll('\n','<br>'),
                         time: time,
                         leixing: type
                     },
