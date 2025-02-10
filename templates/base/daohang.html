@@ -1,0 +1,80 @@
+﻿<style>
+    li a {font-size: 24px !important;}
+    .layui-table-cell{
+        height: auto;
+        white-space: normal;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+</style>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element'], function(){
+      var element = layui.element;
+});
+</script>
+<ul class="layui-nav" layui-filter="2" style="background-color: #5FB878;" lay-filter="test" id="dhl">
+  <li class="layui-nav-item"><a href="/" >主页</a></li>
+  <li class="layui-nav-item"><a href="/xinjianjishi">新建记事</a></li>
+  <li class="layui-nav-item" >
+    <a href="javascript:;">常用链接</a>
+    <dl class="layui-nav-child"> <!-- 二级菜单 -->
+      <dd><a href="http://211.69.15.122/">财务系统（需校园网）</a></dd>
+      <dd><a href="https://teacher.higher.smartedu.cn/h/subject/winter2025/">2025年寒假教师研修</a></dd>
+      <dd><a href="https://co2.cnki.net/Login.html?dp=hait">毕设管理系统</a></dd>
+    </dl>
+  </li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">用户操作</a>
+              <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <dd><a href="/login">登陆</a></dd>
+                <dd><a href="/zhuxiao">注销</a></dd>
+                <dd><a href="javascript:;" onclick="showDialog('密码找回','密码忘记了，那就别用了。')">忘记密码</a></dd>
+              </dl>
+      </li>
+</ul>
+  <dialog id="myDialog">
+    <p id="dialogTitle">标题</p>
+    <p id="dialogContent">内容</p>
+    <button id="guanbi" onclick="closeDialog();">关闭</button>
+  </dialog>
+    <style>
+dialog {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#dialogTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#dialogContent {
+    margin-bottom: 20px;
+    text-align: left;
+}
+#guanbi{float: right}
+</style>
+
+<script>
+    function showDialog(a="密码找回",b="密码忘记了，那就别用了。") {
+        document.getElementById('dialogTitle').innerHTML = a;
+        document.getElementById('dialogContent').innerHTML = b;
+        document.getElementById('myDialog').showModal();
+    }
+
+    function closeDialog() {
+        document.getElementById('myDialog').close();
+    }
+
+</script>
