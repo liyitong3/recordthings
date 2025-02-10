@@ -1,0 +1,119 @@
+<div style="font-size: 24px; text-align: center; display: none">浏览全部</div>
+<table class="layui-hide" id="test2" lay-filter="test2" name="test2"></table>
+<script type="text/html" id="barDemo2">
+    <a class="layui-btn layui-btn-xs" lay-event="detail2">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit2">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del2">删除</a>
+</script>
+
+<script>
+    layui.use('table', function () {
+    var table = layui.table, form=layui.form;
+
+    table.render({
+        id: 'table2',
+        elem: '#test2',
+        url: '/sql/get_things_list', // 数据接口
+        method: 'post', // 使用POST方法
+        where: {yonghuming: getCookie('jsxt_user'), shujufanwei:"all"},
+        cols: [[ // 表头
+            {field: 'id', title: '事件编号', width: 40, hide: true},
+            {field: 'time', title: '录入时间', width: 130},
+            {field: 'end_time', title: '完成时间', hide:true },
+            {field: 'neirong', title: '内容', width: 300, height: 'full-200'},// 让表格高度自动展开
+            {field: 'leixing', title: '事务类型', width: 100},
+            {field: 'wancheng', title: '完成与否', width: 120, templet:function(d){
+                if(d.wancheng==0){
+                    return '<input type="checkbox" id="wancheng_switch2" lay-filter="wcglq2" lay-skin="switch" lay-text="是|否" value="'+d.id+'">';
+                    }
+                else if(d.wancheng==1){
+                    return '<input type="checkbox" id="wancheng_switch2" lay-filter="wcglq2" lay-skin="switch" lay-text="是|否" checked value="'+d.id+'">';
+                    }
+                      }
+            },            {fixed: 'right', title: '功能', toolbar: '#barDemo2', width: 200}
+        ]],
+        page: 1, // 不开启分页了先
+        limit: 10, // 每页显示的条数
+        limits: [10, 20, 30, 40, 50], // 每页条数的选择项
+        done: function(res, curr, count){
+            if(count === 0){
+                layer.msg('暂无待处理业务');
+            }
+        }
+    });
+    function reloadTable2() {
+        table.reload('test2', {
+            url: '/sql/get_things_list', // 数据接口
+            method: 'post', // 使用POST方法
+            where: {yonghuming: getCookie('jsxt_user'), shujufanwei: "all"},
+        });
+    }
+    form.on('switch(wcglq2)', function(obj){
+        if(obj.elem.checked)
+                        done_tag=1;
+                    else
+                        done_tag=0;
+        $.ajax({
+                    url: '/sql/done_id',
+                    type: 'POST',
+                    data: {id: obj.elem.value, donetag:done_tag},
+                    success: function(response) {
+                        layer.msg(response, {time: 3000});
+                        obj.del();
+                    }
+                });
+  });
+    table.on('tool(test2)', function (obj) {
+        var data = obj.data;
+        //console.log(obj)
+        if (obj.event === 'detail2') {
+            layer.confirm(data.neirong+'<br>完成时间：'+data.end_time, {
+                title: '具体的内容如下',
+                btn: ['确定'],
+                icon:1, //0:感叹号，1:对号，2:叉号，3:问号，4:锁，5:哭脸，6:笑脸
+                yes: function(index, layero){
+                    // 确定按钮的回调函数
+                    layer.close(index);
+                },
+                cancel: function(index, layero){
+                    // 取消按钮的回调函数
+                }
+            });
+            layer.close(index);
+        } else if (obj.event === 'edit2') {
+                layer.open(
+                    { type: 2,
+                    title: '编辑记事',
+                    content: "/bianjineirong?id="+obj.data.id
+                    , area: ['800px', '600px']}
+                );
+            } else if (obj.event === 'ok2') {
+            layer.confirm('如果事务完毕，点击确定。 点击取消或者点x即可关闭。',{title:'事情结束了吗？'} ,function (index) {
+                $.ajax({
+                    url: '/sql/done_id',
+                    type: 'POST',
+                    data: {id: obj.data.id, donetag:1},
+                    success: function(response) {
+                        layer.msg(response, {time: 3000});
+                        obj.del();
+                    }
+                });
+                layer.close(index);
+            });
+        } else if (obj.event === 'del2') {
+            layer.confirm('真的删除行么', function (index) {
+                $.ajax({
+                    url: '/sql/delete_id',
+                    type: 'POST',
+                    data: {id: obj.data.id},
+                    success: function(response) {
+                        layer.msg(response, {time: 3000});
+                        obj.del();
+                    }
+                });
+                layer.close(index);
+            });
+        }
+    });
+});
+</script>
