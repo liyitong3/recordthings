@@ -10,7 +10,7 @@ class MysqlUtil():
         host = '127.0.0.1'      # 主机名
         user = 'root'           # 数据库用户名
         password = '123456'     # 数据库密码
-        database = 'memory_things_system' # 数据库名称
+        database = 'memory_things_system'  # 数据库名称
         self.db = pymysql.connect(host=host,user=user,password=password,db=database) # 建立连接
         self.cursor = self.db.cursor(cursor=pymysql.cursors.DictCursor) # 设置游标，并将游标设置为字典类型
     
