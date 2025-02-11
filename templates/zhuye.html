@@ -36,18 +36,29 @@
         }
     </style>
     <script type="text/javascript">
+        function getnicheng(user_name){
+            $.ajax({
+                    url: '/sql/getnamebyuser',
+                    type: 'POST',
+                    data: {yonghuming:user_name},
+                    success: function(response) {
+                        document.getElementById('xianshinicheng').innerText=response;
+                    }
+                });
+        }
         window.onload = function () {
-            document.getElementById('caidan1').addEventListener("click", function () {
-                document.getElementById('caidan1').style.backgroundColor = '#c2c7d2';
-                document.getElementById('caidan2').style.backgroundColor = '#DADDDFB8';
-                document.getElementById('page1').style.display = 'block';
-                document.getElementById('page2').style.display = 'none';
-                layui.use('table', function () {
-                    var table = layui.table;
-                    table.reload('table1',{
-                        url: '/sql/get_things_list', // 数据接口
-                        where:{yonghuming: getCookie('jsxt_user'), shujufanwei:'undone'},
-                });});
+            getnicheng(getCookie('jsxt_user'));
+                document.getElementById('caidan1').addEventListener("click", function () {
+                    document.getElementById('caidan1').style.backgroundColor = '#c2c7d2';
+                    document.getElementById('caidan2').style.backgroundColor = '#DADDDFB8';
+                    document.getElementById('page1').style.display = 'block';
+                    document.getElementById('page2').style.display = 'none';
+                    layui.use('table', function () {
+                        var table = layui.table;
+                        table.reload('table1',{
+                            url: '/sql/get_things_list', // 数据接口
+                            where:{yonghuming: getCookie('jsxt_user'), shujufanwei:'undone'},
+                    });});
 
             });
             document.getElementById('caidan2').addEventListener("click", function () {
@@ -65,12 +76,9 @@
         }
     </script>
 </head>
-<body>
+<body>v1.0.1 解决了带换行符的内容不能正常读取和编辑的问题
 {% include "base/headbar.html" %}
 {% include"base/daohang.html" %}
-<div class="layui-text2">已加载Layui和jQuery。以后所有项目复制一份这个出去再写。
-    flask的flash消息，需要get_flashed_messages()返回
-</div>
 <div class="layui-btn-warm" id="xianshinicheng">null</div>
 <div class="sidebar">
     <div class="menu-item active" id="caidan1">当前进行</div>
