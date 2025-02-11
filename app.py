@@ -135,6 +135,14 @@ def get_things_list():
               "data": jieguo
             }
         return dumps(jg)
+@app.route('/sql/getnamebyuser',methods=['POST','GET'])
+def getnamebyuser():
+    if request.method == 'GET':
+        return "通过user名获取要显示的名字，post提交user值"
+    else:
+        user_name=request.form.get("yonghuming")
+        return GetNichengByUser(user_name)
+
 @app.route("/sql/delete_id", methods=['POST','GET'])
 def delete_id(): #删除事件，根据事件id号
     if request.method == 'GET':
