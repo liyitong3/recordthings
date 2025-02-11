@@ -51,7 +51,7 @@ def GetThingsByUser(user_name:str, thing_type="all",kaishitime="2020-01-01",jies
     if thing_type=='all':
         sql = "SELECT * FROM thingsrecord WHERE is_deleted=0 and id in (select id from thingrecord where user='{}') order by wancheng, time".format(user_name)
     if thing_type=="undone":
-        sql = "SELECT * FROM thingsrecord WHERE wancheng=0 and is_deleted=0 and id in (select id from thingrecord where user='{}') order by wancheng, time".format(user_name)
+        sql = "SELECT * FROM thingsrecord WHERE wancheng=0 and is_deleted=0 and id in (select id from thingrecord where user='{}') order by time".format(user_name)
     print(thing_type,sql)
     jg = db.fetchall(sql)
     if type(jg) == 'str':
@@ -65,7 +65,10 @@ def GetNichengByUser(user_name:str):
     db = mysql()
     sql = "SELECT nicheng FROM users WHERE yonghuming='{}';".format(user_name)
     jg = db.fetchone(sql)
-    return jg['nicheng']
+    if len(jg)==0:
+        return "尚未设置用户名"
+    else:
+        return jg['nicheng']
 
 def ThingExistByid(id):
     db = mysql()
