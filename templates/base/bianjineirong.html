@@ -13,7 +13,7 @@
         return null;
     }
     $(document).ready(function(){
-        document.getElementById('thingshuru').innerHTML = '{{  yuanxianneirong['neirong']  | safe}}';
+        document.getElementById('thingshuru').value= '{{  yuanxianneirong['neirong'] | safe }}';
         document.getElementById('thingxuanze').value = '{{  yuanxianneirong['time'] }}';
         document.getElementById('thingleixing').value = '{{ yuanxianneirong['leixing'] }}';
         document.getElementById('thing_wancheng').value = '{{  yuanxianneirong['wancheng'] }}';
@@ -31,7 +31,7 @@
 
         $("#yonghuming").html(getCookie('jsxt_user'));
         $('#thing_edit').click(function(){
-            var content = $('#thingshuru').text();
+            var content = $('#thingshuru').val();
             var time = $('#thingxuanze').val();
             var type = $('#thingleixing').val();
             var endtime = $('#thing_end_time').val();
@@ -46,7 +46,7 @@
                 type: 'POST',
                 url: '/bianjineirong', // 替换为你的URL
                 data: {
-                    neirong: content.replace('\n','<br>'),
+                    neirong: content.replaceAll('\n','<br>'),
                     time: time,
                     leixing: type,
                     end_time: endtime,
@@ -85,8 +85,7 @@
         <h1 align="center">修改记事</h1>
     </div>
     <div class="layui-row">
-        <div id="thingshuru" placeholder="请输入记事内容" contenteditable="true"></div>
-    </div>
+<textarea id="thingshuru" placeholder="新修改的内容" style="height: 300px; display: block; margin: 0 auto;max-width: 666px;width: 100%"></textarea>    </div>
     <div class="layui-row" style="font-size: 20px; max-width: 666px;">
         <span>录入时间：</span>
         <input type="date1" id="thingxuanze" placeholder="点击此处选择时间">
