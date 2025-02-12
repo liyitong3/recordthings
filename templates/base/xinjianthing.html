@@ -37,7 +37,7 @@
                     success: function (response) {
                         // 处理成功响应
                         if (response.length <= 8) {
-                            alert("请先登陆, 用户操作→登陆");
+                            alert("请先登陆, 用户操作→登录");
                             return;
                         }
                         alert("新建成功");
@@ -45,7 +45,7 @@
                     },
                     error: function (xhr, status, error) {
                         // 处理错误响应
-                        alert("新建失败，错误信息如下：\n请先登陆\n" + error);
+                        alert("新建失败，错误信息如下：\n请先登录\n" + error);
                         console.log(error);
                     }
                 });
