@@ -1,5 +1,6 @@
 <script>
     window.onload = function () {
+document.getElementById('xianshinicheng').innerText=getCookie('jsxt_user');
         var date = new Date();
         var year = date.getFullYear();
         var month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要+1
