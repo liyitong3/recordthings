@@ -46,7 +46,7 @@
                 type: 'POST',
                 url: '/bianjineirong', // 替换为你的URL
                 data: {
-                    neirong: content,
+                    neirong: content.replace('\n','<br>'),
                     time: time,
                     leixing: type,
                     end_time: endtime,
