@@ -1,5 +1,6 @@
-<script>
+﻿<script>
     window.onload = function () {
+document.getElementById('xianshinicheng').innerText=getCookie('jsxt_user');
         var date = new Date();
         var year = date.getFullYear();
         var month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要+1
@@ -45,7 +46,7 @@
                     },
                     error: function (xhr, status, error) {
                         // 处理错误响应
-                        alert("新建失败，错误信息如下：\n请先登陆\n" + error);
+                        alert("新建失败，错误信息如下：\n请先登录\n" + error);
                         console.log(error);
                     }
                 });
