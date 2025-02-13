@@ -21,8 +21,8 @@
             {field: 'time', title: '录入时间', width: 130},
             {field: 'end_time', title: '完成时间', hide:true },
             {field: 'neirong', title: '内容', width: 300, height: 'full-200'},// 让表格高度自动展开
-            {field: 'leixing', title: '事务类型', width: 100},
-            {field: 'wancheng', title: '完成与否', width: 120, templet:function(d){
+            {field: 'leixing', title: '事务类型', width: 90},
+            {field: 'wancheng', title: '完成与否', width: 90, templet:function(d){
                 if(d.wancheng==0){
                     return '<input type="checkbox" id="wancheng_switch2" lay-filter="wcglq2" lay-skin="switch" lay-text="是|否" value="'+d.id+'">';
                     }
