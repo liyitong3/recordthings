@@ -8,7 +8,7 @@
 {% include "base/headbar.html" %}
 {% include"base/daohang.html" %}
 <div class="layui-text2">已加载Layui和jQuery。以后所有项目复制一份这个出去再写。 flask的flash消息，需要get_flashed_messages()返回</div>
-<div class="layui-btn-warm">layui</div>
+<div class="layui-btn-warm">v1.0.3 修复编辑记事不能保存换行符的问题。修正了几处字样：登陆→登录</div>
 <div class="layui-text" style="font-size: 32px; margin-top: 10px;">登陆后查看，并且只能看到自己的。</div>
 <div class="container">
     {% for message in get_flashed_messages() %}
