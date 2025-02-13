@@ -31,7 +31,7 @@
 
         $("#yonghuming").html(getCookie('jsxt_user'));
         $('#thing_edit').click(function(){
-            var content = $('#thingshuru').val();
+            var content = $('#thingshuru').html();
             var time = $('#thingxuanze').val();
             var type = $('#thingleixing').val();
             var endtime = $('#thing_end_time').val();
@@ -46,7 +46,7 @@
                 type: 'POST',
                 url: '/bianjineirong', // 替换为你的URL
                 data: {
-                    neirong: content.replaceAll('\n','<br>'),
+                    neirong: content.replaceAll('</div><div>','<br>'),
                     time: time,
                     leixing: type,
                     end_time: endtime,
