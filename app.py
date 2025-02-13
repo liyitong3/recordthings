@@ -54,20 +54,20 @@ def login():
         if 'status' in session and session['status'] == 1:
             return "2"
         if pwd_server=="用户不存在":
-            flash("用户不存在\n请检查用户名，确认无误后重新登陆。")
+            flash("用户不存在\n请检查用户名，确认无误后重新登录。")
             return "0"
         if pwd_server == password:
             session['status']=1
             session['user']=user_name
             return "1"
         else:
-            flash("密码错误\n请检查密码，确认无误后重新登陆。")
+            flash("密码错误\n请检查密码，确认无误后重新登录。")
             return "-1"
 
 @app.route('/zhuxiao',methods=['GET', 'POST'])
 def zhuxiao():
     if 'status' not in session or ('status' not in session and session['status']==0):
-        flash("请先登陆")
+        flash("请先登录")
     else:
         session['status']=0
         flash(session["user"]+" 注销成功")
