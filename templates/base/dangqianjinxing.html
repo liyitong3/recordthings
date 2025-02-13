@@ -50,7 +50,6 @@
 </script>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 
@@ -91,16 +90,16 @@
                 {field: 'id', title: '事件编号', width: 40, hide: true},
                 {field: 'time', title: '时间', width: 130},
                 {field: 'neirong', title: '内容', width: 300 },
-                {field: 'leixing', title: '事务类型', width: 100},
+                {field: 'leixing', title: '事务类型', width: 90},
                 {
-                    field: 'wancheng', title: '完成与否', width: 120, templet: function (d) {
+                    field: 'wancheng', title: '完成与否', width: 90, templet: function (d) {
                         if (d.wancheng == 0) {
                             return '<input type="checkbox" id="wancheng_switch" lay-filter="wcglq" lay-skin="switch" lay-text="是|否" value="' + d.id + '">';
                         } else if (d.wancheng == 1) {
                             return '<input type="checkbox" id="wancheng_switch" lay-filter="wcglq" lay-skin="switch" lay-text="是|否" checked value="' + d.id + '">';
                         }
                     }
-                }, {fixed: 'right', title: '功能', toolbar: '#barDemo', width: 200}
+                }, {fixed: 'right', title: '功能', toolbar: '#barDemo', width: 120}
             ]],
             page: 1, // 不开启分页了先
             limit: 10, // 每页显示的条数
