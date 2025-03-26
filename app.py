@@ -92,16 +92,27 @@ def xinjian_thing():
 
 @app.route("/bianjineirong", methods=['POST','GET'])
 def bianjineirong():
+    if 'status' not in session or session['status']==0:
+        return "请先登录"
+    else:
+        yonghuming=session['user']
     if request.method == 'GET':
-        things_type=get_system_mysql("leixing")
         id=request.args.get('id')
         if id==None:
-            return "祝你生日快乐"
+            return "祝你生日快乐吧"
+        else:
+            db=mysql()
+            sql="SELECT COUNT(*) FROM thingsrecord WHERE id = %s AND user = '%s';"%(id,yonghuming)
+            jg=db.fetchone(sql)
+            print(jg,type(jg))
+            for k,v in jg.items():
+                if v==0:
+                    return "无权限编辑——道友，不要偷窥别人的记录"
         db=mysql()
         sql="SELECT * FROM thingsrecord WHERE id='{}';".format(id)
         jg=db.fetchone(sql)
         print(jg)
-        return render_template("base/bianjineirong.html", leixing=things_type, yuanxianneirong=jg)
+        return render_template("base/bianjineirong.html", leixing=get_system_mysql("leixing"), yuanxianneirong=jg)
     else:
         nr=request.form.get("neirong")
         time=request.form.get("time")
