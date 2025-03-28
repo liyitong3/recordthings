@@ -5,9 +5,6 @@ from json import dumps
 app = Flask(__name__)
 app.secret_key="lyt"
 
-@app.route("/ajax")
-def ajax():
-    return render_template("ajax_tools.html")
 @app.route("/favicon.ico")
 def favicon():
     return send_file("static/favicon.ico")
